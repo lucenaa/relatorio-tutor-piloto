@@ -1,0 +1,1336 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relat&oacute;rio do Piloto &mdash; Tutor IA Maria Educa&ccedil;&atilde;o</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        :root {
+            --primary: #6C3CE1;
+            --primary-dark: #4A1DB5;
+            --primary-light: #8B5CF6;
+            --accent: #00D4AA;
+            --accent-dark: #00B894;
+            --warm: #FF6B35;
+            --bg-dark: #0F0B2E;
+            --bg-light: #F5F3FF;
+            --bg-white: #FFFFFF;
+            --text-primary: #1A1A2E;
+            --text-secondary: #6B7280;
+            --text-light: #9CA3AF;
+            --card-shadow: 0 4px 24px rgba(108, 60, 225, 0.08);
+            --card-shadow-hover: 0 8px 32px rgba(108, 60, 225, 0.16);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            color: var(--text-primary);
+            background: var(--bg-white);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* ── Hero ─────────────────────────────── */
+        .hero {
+            background: linear-gradient(135deg, #0F0B2E 0%, #2D1B69 30%, #6C3CE1 65%, #00D4AA 100%);
+            color: white;
+            padding: 100px 0 80px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: radial-gradient(circle, rgba(255,255,255,0.06) 1px, transparent 1px);
+            background-size: 32px 32px;
+            pointer-events: none;
+        }
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+        .hero-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 999px;
+            padding: 8px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            margin-bottom: 24px;
+            text-transform: uppercase;
+        }
+        .hero h1 {
+            font-size: 48px;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 16px;
+            letter-spacing: -1px;
+        }
+        .hero p {
+            font-size: 20px;
+            opacity: 0.85;
+            max-width: 600px;
+            margin: 0 auto;
+            font-weight: 400;
+        }
+        .hero-date {
+            margin-top: 24px;
+            font-size: 14px;
+            opacity: 0.6;
+        }
+
+        /* ── Section ──────────────────────────── */
+        .section {
+            padding: 80px 0;
+        }
+        .section-alt {
+            background: var(--bg-light);
+        }
+        .section-title {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+        .section-subtitle {
+            font-size: 17px;
+            color: var(--text-secondary);
+            margin-bottom: 48px;
+            max-width: 600px;
+        }
+
+        /* ── Metric Cards ─────────────────────── */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 20px;
+            margin-top: -60px;
+            position: relative;
+            z-index: 2;
+        }
+        .metric-card {
+            background: white;
+            border-radius: 16px;
+            padding: 32px 20px;
+            text-align: center;
+            box-shadow: var(--card-shadow);
+            border-top: 4px solid var(--primary);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .metric-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--card-shadow-hover);
+        }
+        .metric-card .number {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 42px;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.1;
+        }
+        .metric-card .label {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-top: 8px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* ── Chart containers ─────────────────── */
+        .chart-card {
+            background: white;
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: var(--card-shadow);
+        }
+        .chart-card h3 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 24px;
+        }
+        .chart-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        /* ── Callout badge ────────────────────── */
+        .callout {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            padding: 14px 28px;
+            border-radius: 999px;
+            font-weight: 700;
+            font-size: 18px;
+            margin: 20px 0;
+            box-shadow: 0 4px 16px rgba(108, 60, 225, 0.3);
+        }
+        .callout-accent {
+            background: linear-gradient(135deg, var(--accent-dark), var(--accent));
+        }
+        .callout-center {
+            display: flex;
+            justify-content: center;
+        }
+
+        /* ── Top Lessons ──────────────────────── */
+        .lesson-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 0;
+            border-bottom: 1px solid #F3F4F6;
+        }
+        .lesson-row:last-child { border-bottom: none; }
+        .lesson-info {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex: 1;
+            min-width: 0;
+        }
+        .lesson-rank {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--primary);
+            min-width: 32px;
+        }
+        .lesson-name {
+            font-weight: 600;
+            font-size: 14px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .lesson-meta {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 2px;
+        }
+        .lesson-bar-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            width: 200px;
+            flex-shrink: 0;
+        }
+        .lesson-bar {
+            height: 8px;
+            border-radius: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            transition: width 0.6s ease;
+        }
+        .lesson-pct {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-weight: 800;
+            font-size: 16px;
+            color: var(--primary);
+            min-width: 50px;
+            text-align: right;
+        }
+
+        /* ── Likert ───────────────────────────── */
+        .likert-group-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin: 32px 0 16px;
+            color: var(--primary);
+        }
+        .likert-group-title:first-child { margin-top: 0; }
+        .likert-chart { margin-bottom: 8px; }
+        .likert-row {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 10px 0;
+        }
+        .likert-label {
+            width: 280px;
+            font-size: 13px;
+            font-weight: 500;
+            flex-shrink: 0;
+        }
+        .likert-bar-container {
+            flex: 1;
+            display: flex;
+            height: 28px;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        .likert-segment {
+            height: 100%;
+            transition: width 0.4s ease;
+            min-width: 0;
+        }
+        .concordo-forte { background: #059669; }
+        .concordo { background: #34D399; }
+        .indiferente { background: #D1D5DB; }
+        .discordo { background: #F59E0B; }
+        .discordo-forte { background: #EF4444; }
+        .likert-positive {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-weight: 700;
+            font-size: 15px;
+            color: #059669;
+            min-width: 48px;
+            text-align: right;
+        }
+        .likert-legend {
+            display: flex;
+            gap: 20px;
+            margin-top: 24px;
+            flex-wrap: wrap;
+        }
+        .likert-legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+        .likert-legend-color {
+            width: 14px;
+            height: 14px;
+            border-radius: 3px;
+        }
+
+        /* ── Behaviors ────────────────────────── */
+        .behavior-row {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 12px 0;
+        }
+        .behavior-label {
+            width: 140px;
+            font-weight: 600;
+            font-size: 15px;
+            flex-shrink: 0;
+        }
+        .behavior-bar-container {
+            flex: 1;
+            height: 24px;
+            background: #F3F4F6;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        .behavior-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-dark), var(--accent));
+            border-radius: 12px;
+            transition: width 0.6s ease;
+        }
+        .behavior-count {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            min-width: 100px;
+            text-align: right;
+        }
+
+        /* ── Quote ────────────────────────────── */
+        .quote-card {
+            background: linear-gradient(135deg, #0F0B2E 0%, #2D1B69 100%);
+            border-radius: 20px;
+            padding: 48px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        .quote-card::before {
+            content: '\201C';
+            position: absolute;
+            top: 16px;
+            left: 32px;
+            font-size: 120px;
+            font-family: Georgia, serif;
+            opacity: 0.15;
+            line-height: 1;
+        }
+        .quote-text {
+            font-size: 20px;
+            font-style: italic;
+            line-height: 1.6;
+            margin-bottom: 24px;
+            position: relative;
+            z-index: 1;
+        }
+        .quote-author {
+            font-weight: 700;
+            font-size: 16px;
+        }
+        .quote-role {
+            font-size: 14px;
+            opacity: 0.7;
+            margin-top: 4px;
+        }
+
+        /* ── Reach ────────────────────────────── */
+        .reach-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 24px;
+        }
+        .reach-item {
+            text-align: center;
+            padding: 32px 16px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: var(--card-shadow);
+        }
+        .reach-number {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 36px;
+            font-weight: 800;
+            color: var(--primary);
+        }
+        .reach-label {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+            font-weight: 600;
+        }
+
+        /* ── Modes comparison ─────────────────── */
+        .modes-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+        .mode-card {
+            background: white;
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: var(--card-shadow);
+            text-align: center;
+        }
+        .mode-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+        .mode-title {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        .mode-subtitle {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+        }
+        .mode-stat {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #F3F4F6;
+            font-size: 15px;
+        }
+        .mode-stat:last-child { border-bottom: none; }
+        .mode-stat-value {
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        /* ── Footer ───────────────────────────── */
+        .footer {
+            background: var(--bg-dark);
+            color: white;
+            padding: 60px 0;
+            text-align: center;
+        }
+        .footer h2 {
+            font-size: 28px;
+            margin-bottom: 24px;
+        }
+        .footer-points {
+            list-style: none;
+            max-width: 700px;
+            margin: 0 auto 32px;
+            text-align: left;
+        }
+        .footer-points li {
+            padding: 10px 0;
+            padding-left: 28px;
+            position: relative;
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        .footer-points li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 18px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--accent);
+        }
+        .footer-note {
+            font-size: 13px;
+            opacity: 0.5;
+            margin-top: 32px;
+        }
+
+        /* ── Responsive ───────────────────────── */
+        @media (max-width: 1024px) {
+            .cards-grid { grid-template-columns: repeat(3, 1fr); }
+            .reach-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 32px; }
+            .hero p { font-size: 16px; }
+            .section { padding: 48px 0; }
+            .section-title { font-size: 24px; }
+            .cards-grid { grid-template-columns: repeat(2, 1fr); margin-top: -40px; }
+            .chart-row { grid-template-columns: 1fr; }
+            .modes-grid { grid-template-columns: 1fr; }
+            .reach-grid { grid-template-columns: repeat(2, 1fr); }
+            .metric-card .number { font-size: 32px; }
+            .likert-label { width: 200px; font-size: 12px; }
+            .lesson-bar-container { width: 140px; }
+            .callout { font-size: 15px; padding: 12px 20px; }
+        }
+        @media (max-width: 480px) {
+            .cards-grid { grid-template-columns: 1fr; }
+            .reach-grid { grid-template-columns: 1fr 1fr; }
+            .likert-row { flex-wrap: wrap; }
+            .likert-label { width: 100%; }
+        }
+
+        /* ── Print styles ─────────────────────── */
+        @media print {
+            .hero { padding: 40px 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .section { padding: 30px 0; }
+            .metric-card, .chart-card, .mode-card, .reach-item { box-shadow: 0 1px 3px rgba(0,0,0,0.1); break-inside: avoid; }
+            .cards-grid { margin-top: -30px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ════════ HERO ════════ -->
+    <section class="hero">
+        <div class="container hero-content">
+            <div class="hero-badge">Relat&oacute;rio de Piloto</div>
+            <h1>Tutor IA Maria Educa&ccedil;&atilde;o</h1>
+            <p>Intelig&ecirc;ncia artificial personalizada transformando a experi&ecirc;ncia de aprendizagem em sala de aula</p>
+            <div class="hero-date">Novembro 2025 &middot; Resultados do Piloto em Escolas P&uacute;blicas</div>
+        </div>
+    </section>
+
+    <!-- ════════ METRIC CARDS ════════ -->
+    <section class="section">
+        <div class="container">
+            <div class="cards-grid">
+                <div class="metric-card">
+                    <div class="number">339</div>
+                    <div class="label">Sess&otilde;es de Aprendizagem</div>
+                </div>
+                <div class="metric-card">
+                    <div class="number">66</div>
+                    <div class="label">Alunos Participantes</div>
+                </div>
+                <div class="metric-card">
+                    <div class="number">6.882</div>
+                    <div class="label">Mensagens Trocadas</div>
+                </div>
+                <div class="metric-card">
+                    <div class="number">20.3</div>
+                    <div class="label">M&eacute;dia de Msgs / Sess&atilde;o</div>
+                </div>
+                <div class="metric-card">
+                    <div class="number">10</div>
+                    <div class="label">Aulas Disponibilizadas</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════ GROWTH TREND ════════ -->
+    <section class="section section-alt">
+        <div class="container">
+            <h2 class="section-title">Crescimento ao Longo do Piloto</h2>
+            <p class="section-subtitle">Ado&ccedil;&atilde;o org&acirc;nica: alunos e professores aderiram progressivamente ao tutor durante as semanas do piloto.</p>
+            <div class="callout-center">
+                <div class="callout">7.8x de crescimento em sess&otilde;es</div>
+            </div>
+            <div class="chart-card" style="margin-top: 24px;">
+                <canvas id="growthChart" height="80"></canvas>
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════ ENGAGEMENT DEPTH ════════ -->
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">Profundidade do Engajamento</h2>
+            <p class="section-subtitle">Cada mensagem representa uma intera&ccedil;&atilde;o real entre aluno e tutor &mdash; perguntas, respostas e explica&ccedil;&otilde;es personalizadas.</p>
+            <div class="chart-row" style="margin-bottom: 24px;">
+                <div class="chart-card" style="text-align: center;">
+                    <div style="font-size: 56px; font-weight: 800; font-family: 'Plus Jakarta Sans', sans-serif; background: linear-gradient(135deg, var(--primary), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">166</div>
+                    <div style="font-size: 15px; color: var(--text-secondary); font-weight: 600; margin-top: 4px;">Sess&otilde;es com engajamento significativo</div>
+                    <div style="font-size: 13px; color: var(--text-light); margin-top: 8px;">6 ou mais mensagens trocadas com o tutor</div>
+                </div>
+                <div class="chart-card" style="text-align: center;">
+                    <div style="font-size: 56px; font-weight: 800; font-family: 'Plus Jakarta Sans', sans-serif; background: linear-gradient(135deg, var(--accent-dark), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">123</div>
+                    <div style="font-size: 15px; color: var(--text-secondary); font-weight: 600; margin-top: 4px;">Sess&otilde;es com conversa&ccedil;&otilde;es profundas</div>
+                    <div style="font-size: 13px; color: var(--text-light); margin-top: 8px;">20 ou mais mensagens &mdash; di&aacute;logos reais de aprendizagem</div>
+                </div>
+            </div>
+            <div class="chart-card">
+                <h3>Detalhamento das sess&otilde;es engajadas (6+ mensagens)</h3>
+                <canvas id="engagementChart" height="60"></canvas>
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════ COVERAGE ════════ -->
+    <section class="section section-alt">
+        <div class="container">
+            <h2 class="section-title">Cobertura e Versatilidade</h2>
+            <p class="section-subtitle">O tutor se adaptou a m&uacute;ltiplas disciplinas e s&eacute;ries, demonstrando versatilidade para diferentes contextos pedag&oacute;gicos.</p>
+            <div class="chart-row">
+                <div class="chart-card">
+                    <h3>Sess&otilde;es por Disciplina</h3>
+                    <canvas id="subjectChart" height="200"></canvas>
+                </div>
+                <div class="chart-card">
+                    <h3>Sess&otilde;es por Turma</h3>
+                    <canvas id="classChart" height="200"></canvas>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════ COMPLETION RATES ════════ -->
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">Taxas de Conclus&atilde;o</h2>
+            <p class="section-subtitle">Desempenho das turmas com acesso adequado &agrave; infraestrutura &mdash; conclus&atilde;o da aula completa pelo aluno.</p>
+            <div class="callout-center">
+                <div class="callout">At&eacute; 100% de conclus&atilde;o nas turmas com infraestrutura adequada</div>
+            </div>
+            <div class="chart-card" style="margin-top: 24px;">
+                
+        <div class="lesson-row">
+            <div class="lesson-info">
+                <span class="lesson-rank">#1</span>
+                <div>
+                    <div class="lesson-name">4º ANO B - Língua Portuguesa (Teoria)</div>
+                    <div class="lesson-meta">18 alunos &middot; 18 conclu&iacute;ram &middot; M&eacute;dia de 49.9 mensagens</div>
+                </div>
+            </div>
+            <div class="lesson-bar-container">
+                <div class="lesson-bar" style="width: 100%"></div>
+                <span class="lesson-pct">100%</span>
+            </div>
+        </div>
+        <div class="lesson-row">
+            <div class="lesson-info">
+                <span class="lesson-rank">#2</span>
+                <div>
+                    <div class="lesson-name">4º ANO B - Língua Portuguesa (Prática)</div>
+                    <div class="lesson-meta">18 alunos &middot; 17 conclu&iacute;ram &middot; M&eacute;dia de 53.1 mensagens</div>
+                </div>
+            </div>
+            <div class="lesson-bar-container">
+                <div class="lesson-bar" style="width: 94.4%"></div>
+                <span class="lesson-pct">94.4%</span>
+            </div>
+        </div>
+        <div class="lesson-row">
+            <div class="lesson-info">
+                <span class="lesson-rank">#3</span>
+                <div>
+                    <div class="lesson-name">4º ANO A - Língua Portuguesa (Teoria)</div>
+                    <div class="lesson-meta">16 alunos &middot; 15 conclu&iacute;ram &middot; M&eacute;dia de 49.2 mensagens</div>
+                </div>
+            </div>
+            <div class="lesson-bar-container">
+                <div class="lesson-bar" style="width: 93.8%"></div>
+                <span class="lesson-pct">93.8%</span>
+            </div>
+        </div>
+        <div class="lesson-row">
+            <div class="lesson-info">
+                <span class="lesson-rank">#4</span>
+                <div>
+                    <div class="lesson-name">4º ANO B - Matemática (Teoria)</div>
+                    <div class="lesson-meta">18 alunos &middot; 14 conclu&iacute;ram &middot; M&eacute;dia de 52.9 mensagens</div>
+                </div>
+            </div>
+            <div class="lesson-bar-container">
+                <div class="lesson-bar" style="width: 77.8%"></div>
+                <span class="lesson-pct">77.8%</span>
+            </div>
+        </div>
+        <div class="lesson-row">
+            <div class="lesson-info">
+                <span class="lesson-rank">#5</span>
+                <div>
+                    <div class="lesson-name">4º ANO B - Ciências (Prática)</div>
+                    <div class="lesson-meta">11 alunos &middot; 7 conclu&iacute;ram &middot; M&eacute;dia de 46.4 mensagens</div>
+                </div>
+            </div>
+            <div class="lesson-bar-container">
+                <div class="lesson-bar" style="width: 63.6%"></div>
+                <span class="lesson-pct">63.6%</span>
+            </div>
+        </div>
+        <div class="lesson-row">
+            <div class="lesson-info">
+                <span class="lesson-rank">#6</span>
+                <div>
+                    <div class="lesson-name">4º ANO B - Ciências (Teoria)</div>
+                    <div class="lesson-meta">18 alunos &middot; 11 conclu&iacute;ram &middot; M&eacute;dia de 37.5 mensagens</div>
+                </div>
+            </div>
+            <div class="lesson-bar-container">
+                <div class="lesson-bar" style="width: 61.1%"></div>
+                <span class="lesson-pct">61.1%</span>
+            </div>
+        </div>
+        <div class="lesson-row">
+            <div class="lesson-info">
+                <span class="lesson-rank">#7</span>
+                <div>
+                    <div class="lesson-name">4º ANO B - Matemática (Prática)</div>
+                    <div class="lesson-meta">15 alunos &middot; 8 conclu&iacute;ram &middot; M&eacute;dia de 43.7 mensagens</div>
+                </div>
+            </div>
+            <div class="lesson-bar-container">
+                <div class="lesson-bar" style="width: 53.3%"></div>
+                <span class="lesson-pct">53.3%</span>
+            </div>
+        </div>
+        <div class="lesson-row">
+            <div class="lesson-info">
+                <span class="lesson-rank">#8</span>
+                <div>
+                    <div class="lesson-name">8º ANO B - Matemática (Prática)</div>
+                    <div class="lesson-meta">6 alunos &middot; 3 conclu&iacute;ram &middot; M&eacute;dia de 34.0 mensagens</div>
+                </div>
+            </div>
+            <div class="lesson-bar-container">
+                <div class="lesson-bar" style="width: 50.0%"></div>
+                <span class="lesson-pct">50.0%</span>
+            </div>
+        </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════ MODES COMPARISON ════════ -->
+    <section class="section section-alt">
+        <div class="container">
+            <h2 class="section-title">Modos Aprender vs. Praticar</h2>
+            <p class="section-subtitle">Dois modos complementares: o Aprender ensina o conte&uacute;do via conversa&ccedil;&atilde;o guiada; o Praticar testa o conhecimento com quest&otilde;es adaptativas.</p>
+            <div class="modes-grid">
+                <div class="mode-card">
+                    <div class="mode-icon">&#128218;</div>
+                    <div class="mode-title">Modo Aprender</div>
+                    <div class="mode-subtitle">Conversa guiada com o tutor IA</div>
+                    <div class="mode-stat">
+                        <span>Sess&otilde;es</span>
+                        <span class="mode-stat-value">184</span>
+                    </div>
+                    <div class="mode-stat">
+                        <span>M&eacute;dia de Mensagens</span>
+                        <span class="mode-stat-value">20.8</span>
+                    </div>
+                    <div class="mode-stat">
+                        <span>Explica&ccedil;&otilde;es claras</span>
+                        <span class="mode-stat-value" style="color: var(--accent-dark);">100%</span>
+                    </div>
+                </div>
+                <div class="mode-card">
+                    <div class="mode-icon">&#9997;&#65039;</div>
+                    <div class="mode-title">Modo Praticar</div>
+                    <div class="mode-subtitle">Quest&otilde;es adaptativas com devolutiva</div>
+                    <div class="mode-stat">
+                        <span>Sess&otilde;es</span>
+                        <span class="mode-stat-value">155</span>
+                    </div>
+                    <div class="mode-stat">
+                        <span>M&eacute;dia de Mensagens</span>
+                        <span class="mode-stat-value">19.7</span>
+                    </div>
+                    <div class="mode-stat">
+                        <span>Dificuldade adequada</span>
+                        <span class="mode-stat-value" style="color: var(--accent-dark);">100%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════ TEACHER FEEDBACK ════════ -->
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">Feedback dos Professores</h2>
+            <p class="section-subtitle">Avalia&ccedil;&atilde;o detalhada de 6 professores sobre diversos aspectos do tutor, em escala de concord&acirc;ncia.</p>
+            <div class="chart-card">
+                <h3 class="likert-group-title">Aprendizagem e Usabilidade</h3><div class="likert-chart">
+            <div class="likert-row">
+                <div class="likert-label">Alunos demonstraram interesse e motivação</div>
+                <div class="likert-bar-container">
+                    <div class="likert-segment concordo-forte" style="width:33.33333333333333%" title="Concordo Fortemente: 2"></div>
+                    <div class="likert-segment concordo" style="width:50.0%" title="Concordo: 3"></div>
+                    <div class="likert-segment indiferente" style="width:0.0%" title="Indiferente: 0"></div>
+                    <div class="likert-segment discordo" style="width:16.666666666666664%" title="Discordo: 1"></div>
+                    <div class="likert-segment discordo-forte" style="width:0.0%" title="Discordo Fortemente: 0"></div>
+                </div>
+                <div class="likert-positive">83%</div>
+            </div>
+            <div class="likert-row">
+                <div class="likert-label">Alunos demonstraram melhora na compreensão</div>
+                <div class="likert-bar-container">
+                    <div class="likert-segment concordo-forte" style="width:0.0%" title="Concordo Fortemente: 0"></div>
+                    <div class="likert-segment concordo" style="width:83.33333333333334%" title="Concordo: 5"></div>
+                    <div class="likert-segment indiferente" style="width:0.0%" title="Indiferente: 0"></div>
+                    <div class="likert-segment discordo" style="width:16.666666666666664%" title="Discordo: 1"></div>
+                    <div class="likert-segment discordo-forte" style="width:0.0%" title="Discordo Fortemente: 0"></div>
+                </div>
+                <div class="likert-positive">83%</div>
+            </div>
+            <div class="likert-row">
+                <div class="likert-label">Linguagem do tutor foi clara e compreensível</div>
+                <div class="likert-bar-container">
+                    <div class="likert-segment concordo-forte" style="width:0.0%" title="Concordo Fortemente: 0"></div>
+                    <div class="likert-segment concordo" style="width:83.33333333333334%" title="Concordo: 5"></div>
+                    <div class="likert-segment indiferente" style="width:16.666666666666664%" title="Indiferente: 1"></div>
+                    <div class="likert-segment discordo" style="width:0.0%" title="Discordo: 0"></div>
+                    <div class="likert-segment discordo-forte" style="width:0.0%" title="Discordo Fortemente: 0"></div>
+                </div>
+                <div class="likert-positive">83%</div>
+            </div>
+            <div class="likert-row">
+                <div class="likert-label">Nível do Tutor foi adequado para a turma</div>
+                <div class="likert-bar-container">
+                    <div class="likert-segment concordo-forte" style="width:0.0%" title="Concordo Fortemente: 0"></div>
+                    <div class="likert-segment concordo" style="width:83.33333333333334%" title="Concordo: 5"></div>
+                    <div class="likert-segment indiferente" style="width:0.0%" title="Indiferente: 0"></div>
+                    <div class="likert-segment discordo" style="width:16.666666666666664%" title="Discordo: 1"></div>
+                    <div class="likert-segment discordo-forte" style="width:0.0%" title="Discordo Fortemente: 0"></div>
+                </div>
+                <div class="likert-positive">83%</div>
+            </div>
+            <div class="likert-row">
+                <div class="likert-label">Facilidade para entrar/logar na plataforma</div>
+                <div class="likert-bar-container">
+                    <div class="likert-segment concordo-forte" style="width:16.666666666666664%" title="Concordo Fortemente: 1"></div>
+                    <div class="likert-segment concordo" style="width:50.0%" title="Concordo: 3"></div>
+                    <div class="likert-segment indiferente" style="width:0.0%" title="Indiferente: 0"></div>
+                    <div class="likert-segment discordo" style="width:0.0%" title="Discordo: 0"></div>
+                    <div class="likert-segment discordo-forte" style="width:33.33333333333333%" title="Discordo Fortemente: 2"></div>
+                </div>
+                <div class="likert-positive">67%</div>
+            </div>
+            <div class="likert-row">
+                <div class="likert-label">Navegação entre aulas foi fácil e intuitiva</div>
+                <div class="likert-bar-container">
+                    <div class="likert-segment concordo-forte" style="width:0.0%" title="Concordo Fortemente: 0"></div>
+                    <div class="likert-segment concordo" style="width:83.33333333333334%" title="Concordo: 5"></div>
+                    <div class="likert-segment indiferente" style="width:16.666666666666664%" title="Indiferente: 1"></div>
+                    <div class="likert-segment discordo" style="width:0.0%" title="Discordo: 0"></div>
+                    <div class="likert-segment discordo-forte" style="width:0.0%" title="Discordo Fortemente: 0"></div>
+                </div>
+                <div class="likert-positive">83%</div>
+            </div>
+            <div class="likert-row">
+                <div class="likert-label">Plataforma funcionou sem problemas técnicos</div>
+                <div class="likert-bar-container">
+                    <div class="likert-segment concordo-forte" style="width:0.0%" title="Concordo Fortemente: 0"></div>
+                    <div class="likert-segment concordo" style="width:33.33333333333333%" title="Concordo: 2"></div>
+                    <div class="likert-segment indiferente" style="width:16.666666666666664%" title="Indiferente: 1"></div>
+                    <div class="likert-segment discordo" style="width:16.666666666666664%" title="Discordo: 1"></div>
+                    <div class="likert-segment discordo-forte" style="width:33.33333333333333%" title="Discordo Fortemente: 2"></div>
+                </div>
+                <div class="likert-positive">33%</div>
+            </div></div><h3 class="likert-group-title">Modo Aprender</h3><div class="likert-chart">
+            <div class="likert-row">
+                <div class="likert-label">Explicações foram claras</div>
+                <div class="likert-bar-container">
+                    <div class="likert-segment concordo-forte" style="width:0.0%" title="Concordo Fortemente: 0"></div>
+                    <div class="likert-segment concordo" style="width:100.0%" title="Concordo: 6"></div>
+                    <div class="likert-segment indiferente" style="width:0.0%" title="Indiferente: 0"></div>
+                    <div class="likert-segment discordo" style="width:0.0%" title="Discordo: 0"></div>
+                    <div class="likert-segment discordo-forte" style="width:0.0%" title="Discordo Fortemente: 0"></div>
+                </div>
+                <div class="likert-positive">100%</div>
+            </div>
+            <div class="likert-row">
+                <div class="likert-label">Alunos se mantiveram engajados</div>
+                <div class="likert-bar-container">
+                    <div class="likert-segment concordo-forte" style="width:16.666666666666664%" title="Concordo Fortemente: 1"></div>
+                    <div class="likert-segment concordo" style="width:66.66666666666666%" title="Concordo: 4"></div>
+                    <div class="likert-segment indiferente" style="width:0.0%" title="Indiferente: 0"></div>
+                    <div class="likert-segment discordo" style="width:0.0%" title="Discordo: 0"></div>
+                    <div class="likert-segment discordo-forte" style="width:16.666666666666664%" title="Discordo Fortemente: 1"></div>
+                </div>
+                <div class="likert-positive">83%</div>
+            </div>
+            <div class="likert-row">
+                <div class="likert-label">Modo ajudou a reforçar o conteúdo</div>
+                <div class="likert-bar-container">
+                    <div class="likert-segment concordo-forte" style="width:0.0%" title="Concordo Fortemente: 0"></div>
+                    <div class="likert-segment concordo" style="width:83.33333333333334%" title="Concordo: 5"></div>
+                    <div class="likert-segment indiferente" style="width:0.0%" title="Indiferente: 0"></div>
+                    <div class="likert-segment discordo" style="width:16.666666666666664%" title="Discordo: 1"></div>
+                    <div class="likert-segment discordo-forte" style="width:0.0%" title="Discordo Fortemente: 0"></div>
+                </div>
+                <div class="likert-positive">83%</div>
+            </div>
+            <div class="likert-row">
+                <div class="likert-label">Didática foi adequada</div>
+                <div class="likert-bar-container">
+                    <div class="likert-segment concordo-forte" style="width:0.0%" title="Concordo Fortemente: 0"></div>
+                    <div class="likert-segment concordo" style="width:66.66666666666666%" title="Concordo: 4"></div>
+                    <div class="likert-segment indiferente" style="width:16.666666666666664%" title="Indiferente: 1"></div>
+                    <div class="likert-segment discordo" style="width:16.666666666666664%" title="Discordo: 1"></div>
+                    <div class="likert-segment discordo-forte" style="width:0.0%" title="Discordo Fortemente: 0"></div>
+                </div>
+                <div class="likert-positive">67%</div>
+            </div></div><h3 class="likert-group-title">Modo Praticar</h3><div class="likert-chart">
+            <div class="likert-row">
+                <div class="likert-label">Nível de dificuldade foi adequado</div>
+                <div class="likert-bar-container">
+                    <div class="likert-segment concordo-forte" style="width:0.0%" title="Concordo Fortemente: 0"></div>
+                    <div class="likert-segment concordo" style="width:100.0%" title="Concordo: 6"></div>
+                    <div class="likert-segment indiferente" style="width:0.0%" title="Indiferente: 0"></div>
+                    <div class="likert-segment discordo" style="width:0.0%" title="Discordo: 0"></div>
+                    <div class="likert-segment discordo-forte" style="width:0.0%" title="Discordo Fortemente: 0"></div>
+                </div>
+                <div class="likert-positive">100%</div>
+            </div>
+            <div class="likert-row">
+                <div class="likert-label">Questões foram relevantes para o conteúdo</div>
+                <div class="likert-bar-container">
+                    <div class="likert-segment concordo-forte" style="width:0.0%" title="Concordo Fortemente: 0"></div>
+                    <div class="likert-segment concordo" style="width:83.33333333333334%" title="Concordo: 5"></div>
+                    <div class="likert-segment indiferente" style="width:0.0%" title="Indiferente: 0"></div>
+                    <div class="likert-segment discordo" style="width:16.666666666666664%" title="Discordo: 1"></div>
+                    <div class="likert-segment discordo-forte" style="width:0.0%" title="Discordo Fortemente: 0"></div>
+                </div>
+                <div class="likert-positive">83%</div>
+            </div>
+            <div class="likert-row">
+                <div class="likert-label">Alunos resolveram questões com autonomia</div>
+                <div class="likert-bar-container">
+                    <div class="likert-segment concordo-forte" style="width:0.0%" title="Concordo Fortemente: 0"></div>
+                    <div class="likert-segment concordo" style="width:83.33333333333334%" title="Concordo: 5"></div>
+                    <div class="likert-segment indiferente" style="width:16.666666666666664%" title="Indiferente: 1"></div>
+                    <div class="likert-segment discordo" style="width:0.0%" title="Discordo: 0"></div>
+                    <div class="likert-segment discordo-forte" style="width:0.0%" title="Discordo Fortemente: 0"></div>
+                </div>
+                <div class="likert-positive">83%</div>
+            </div>
+            <div class="likert-row">
+                <div class="likert-label">Alunos se mantiveram engajados</div>
+                <div class="likert-bar-container">
+                    <div class="likert-segment concordo-forte" style="width:0.0%" title="Concordo Fortemente: 0"></div>
+                    <div class="likert-segment concordo" style="width:66.66666666666666%" title="Concordo: 4"></div>
+                    <div class="likert-segment indiferente" style="width:16.666666666666664%" title="Indiferente: 1"></div>
+                    <div class="likert-segment discordo" style="width:16.666666666666664%" title="Discordo: 1"></div>
+                    <div class="likert-segment discordo-forte" style="width:0.0%" title="Discordo Fortemente: 0"></div>
+                </div>
+                <div class="likert-positive">67%</div>
+            </div></div><h3 class="likert-group-title">Satisfação Geral</h3><div class="likert-chart">
+            <div class="likert-row">
+                <div class="likert-label">Satisfação geral com o uso foi alta</div>
+                <div class="likert-bar-container">
+                    <div class="likert-segment concordo-forte" style="width:16.666666666666664%" title="Concordo Fortemente: 1"></div>
+                    <div class="likert-segment concordo" style="width:50.0%" title="Concordo: 3"></div>
+                    <div class="likert-segment indiferente" style="width:0.0%" title="Indiferente: 0"></div>
+                    <div class="likert-segment discordo" style="width:33.33333333333333%" title="Discordo: 2"></div>
+                    <div class="likert-segment discordo-forte" style="width:0.0%" title="Discordo Fortemente: 0"></div>
+                </div>
+                <div class="likert-positive">67%</div>
+            </div>
+            <div class="likert-row">
+                <div class="likert-label">Gostaria de continuar utilizando após testes</div>
+                <div class="likert-bar-container">
+                    <div class="likert-segment concordo-forte" style="width:16.666666666666664%" title="Concordo Fortemente: 1"></div>
+                    <div class="likert-segment concordo" style="width:66.66666666666666%" title="Concordo: 4"></div>
+                    <div class="likert-segment indiferente" style="width:0.0%" title="Indiferente: 0"></div>
+                    <div class="likert-segment discordo" style="width:16.666666666666664%" title="Discordo: 1"></div>
+                    <div class="likert-segment discordo-forte" style="width:0.0%" title="Discordo Fortemente: 0"></div>
+                </div>
+                <div class="likert-positive">83%</div>
+            </div></div>
+                <div class="likert-legend">
+                    <div class="likert-legend-item"><div class="likert-legend-color" style="background:#059669"></div> Concordo Fortemente</div>
+                    <div class="likert-legend-item"><div class="likert-legend-color" style="background:#34D399"></div> Concordo</div>
+                    <div class="likert-legend-item"><div class="likert-legend-color" style="background:#D1D5DB"></div> Indiferente</div>
+                    <div class="likert-legend-item"><div class="likert-legend-color" style="background:#F59E0B"></div> Discordo</div>
+                    <div class="likert-legend-item"><div class="likert-legend-color" style="background:#EF4444"></div> Discordo Fortemente</div>
+                </div>
+            </div>
+            <div class="callout-center" style="margin-top: 32px;">
+                <div class="callout callout-accent">
+                    5 de 6 professores desejam continuar usando o Tutor
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════ BEHAVIORS ════════ -->
+    <section class="section section-alt">
+        <div class="container">
+            <h2 class="section-title">Comportamentos Observados em Sala</h2>
+            <p class="section-subtitle">Comportamentos positivos relatados pelos professores durante o uso do tutor pelos alunos.</p>
+            <div class="chart-card">
+                
+        <div class="behavior-row">
+            <div class="behavior-label">Curiosidade</div>
+            <div class="behavior-bar-container">
+                <div class="behavior-bar" style="width: 83%"></div>
+            </div>
+            <div class="behavior-count">5/6 (83%)</div>
+        </div>
+        <div class="behavior-row">
+            <div class="behavior-label">Empolgação</div>
+            <div class="behavior-bar-container">
+                <div class="behavior-bar" style="width: 67%"></div>
+            </div>
+            <div class="behavior-count">4/6 (67%)</div>
+        </div>
+        <div class="behavior-row">
+            <div class="behavior-label">Colaboração</div>
+            <div class="behavior-bar-container">
+                <div class="behavior-bar" style="width: 67%"></div>
+            </div>
+            <div class="behavior-count">4/6 (67%)</div>
+        </div>
+        <div class="behavior-row">
+            <div class="behavior-label">Foco</div>
+            <div class="behavior-bar-container">
+                <div class="behavior-bar" style="width: 50%"></div>
+            </div>
+            <div class="behavior-count">3/6 (50%)</div>
+        </div>
+        <div class="behavior-row">
+            <div class="behavior-label">Autonomia</div>
+            <div class="behavior-bar-container">
+                <div class="behavior-bar" style="width: 33%"></div>
+            </div>
+            <div class="behavior-count">2/6 (33%)</div>
+        </div>
+            </div>
+            <div class="callout-center" style="margin-top: 24px;">
+                <div class="callout">4 de 6 professores n&atilde;o observaram nenhum comportamento negativo</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════ TESTIMONIAL ════════ -->
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">Depoimento</h2>
+            <div class="quote-card">
+                <div class="quote-text">&ldquo;A ferramenta foi de grande valia nas aulas de matemática das turmas dos oitavos anos pois conseguiu agregar conhecimentos aos discentes, mostrando interesse ainda mais pela aula.&rdquo;</div>
+                <div class="quote-author">Jucileide Cardoso de Oliveira</div>
+                <div class="quote-role">Professora de Matemática — 8º Ano, Demerval Lobão</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════ REACH ════════ -->
+    <section class="section section-alt">
+        <div class="container">
+            <h2 class="section-title">Alcance do Piloto</h2>
+            <p class="section-subtitle">Presen&ccedil;a em m&uacute;ltiplos munic&iacute;pios, s&eacute;ries e disciplinas &mdash; validando a adaptabilidade do tutor.</p>
+            <div class="reach-grid">
+                <div class="reach-item">
+                    <div class="reach-number">2</div>
+                    <div class="reach-label">Munic&iacute;pios</div>
+                </div>
+                <div class="reach-item">
+                    <div class="reach-number">6</div>
+                    <div class="reach-label">Professores</div>
+                </div>
+                <div class="reach-item">
+                    <div class="reach-number">7</div>
+                    <div class="reach-label">Turmas</div>
+                </div>
+                <div class="reach-item">
+                    <div class="reach-number">3</div>
+                    <div class="reach-label">Disciplinas</div>
+                </div>
+                <div class="reach-item">
+                    <div class="reach-number" style="font-size: 24px;">3º ao 8º ano</div>
+                    <div class="reach-label">S&eacute;ries</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════ FOOTER ════════ -->
+    <footer class="footer">
+        <div class="container">
+            <h2>Principais Conclus&otilde;es</h2>
+            <ul class="footer-points">
+                <li><strong>6.882 mensagens trocadas</strong> entre alunos e tutor em 339 sess&otilde;es &mdash; engajamento real e conversas profundas de aprendizagem, n&atilde;o apenas cliques.</li>
+                <li><strong>Crescimento org&acirc;nico de 7.8x</strong> ao longo do piloto demonstra ado&ccedil;&atilde;o natural por professores e alunos &mdash; sem necessidade de incentivos artificiais.</li>
+                <li><strong>100% dos professores</strong> concordam que as explica&ccedil;&otilde;es do modo Aprender s&atilde;o claras e que o n&iacute;vel de dificuldade do modo Praticar &eacute; adequado &mdash; valida&ccedil;&atilde;o pedag&oacute;gica do conte&uacute;do gerado por IA.</li>
+            </ul>
+            <div class="footer-note">Relat&oacute;rio gerado com base nos dados do piloto realizado em Novembro de 2025<br>Maria Educa&ccedil;&atilde;o &copy; 2025</div>
+        </div>
+    </footer>
+
+    <!-- ════════ CHART.JS SCRIPTS ════════ -->
+    <script>
+    const DATA = {"hero": {"total_sessions": 339, "unique_students": 66, "total_messages": 6882, "avg_messages": 20.3, "unique_lessons": 10}, "growth": {"labels": ["07/Nov", "10/Nov", "11/Nov", "18/Nov", "20/Nov", "24/Nov"], "values": [5, 6, 12, 25, 24, 39], "factor": 7.8}, "message_distribution": {"labels": ["Exploratório (1-5)", "Inicial (6-20)", "Intermediário (21-40)", "Avançado (41-60)", "Profundo (61+)"], "values": [173, 43, 47, 52, 24], "deep_sessions": 123, "deep_pct": 36.3}, "by_subject": {"Língua Portuguesa": 214, "Ciências": 35, "Matemática": 90}, "by_class": {"3º ANO A": 136, "4º ANO B": 132, "4º ANO A": 42, "8º ANO B": 20, "8º ANO C": 2, "8º ANO A": 4, "6º ANO A": 3}, "top_lessons": [{"label": "4°B LP (T)", "full_label": "4º ANO B - Língua Portuguesa (Teoria)", "pct": 100, "avg_msgs": 49.9, "alunos": 18, "finalizadas": 18}, {"label": "4°B LP (P)", "full_label": "4º ANO B - Língua Portuguesa (Prática)", "pct": 94.4, "avg_msgs": 53.1, "alunos": 18, "finalizadas": 17}, {"label": "4°A LP (T)", "full_label": "4º ANO A - Língua Portuguesa (Teoria)", "pct": 93.8, "avg_msgs": 49.2, "alunos": 16, "finalizadas": 15}, {"label": "4°B Mat (T)", "full_label": "4º ANO B - Matemática (Teoria)", "pct": 77.8, "avg_msgs": 52.9, "alunos": 18, "finalizadas": 14}, {"label": "4°B Ciên (P)", "full_label": "4º ANO B - Ciências (Prática)", "pct": 63.6, "avg_msgs": 46.4, "alunos": 11, "finalizadas": 7}, {"label": "4°B Ciên (T)", "full_label": "4º ANO B - Ciências (Teoria)", "pct": 61.1, "avg_msgs": 37.5, "alunos": 18, "finalizadas": 11}, {"label": "4°B Mat (P)", "full_label": "4º ANO B - Matemática (Prática)", "pct": 53.3, "avg_msgs": 43.7, "alunos": 15, "finalizadas": 8}, {"label": "8°B Mat (P)", "full_label": "8º ANO B - Matemática (Prática)", "pct": 50.0, "avg_msgs": 34.0, "alunos": 6, "finalizadas": 3}], "modes": {"teoria_sessions": 184, "pratica_sessions": 155, "avg_teoria": 20.8, "avg_pratica": 19.7}, "likert": {"Aprendizagem e Usabilidade": [{"label": "Alunos demonstraram interesse e motivação", "counts": {"concordo_forte": 2, "concordo": 3, "indiferente": 0, "discordo": 1, "discordo_forte": 0}, "total": 6, "positive_pct": 83}, {"label": "Alunos demonstraram melhora na compreensão", "counts": {"concordo_forte": 0, "concordo": 5, "indiferente": 0, "discordo": 1, "discordo_forte": 0}, "total": 6, "positive_pct": 83}, {"label": "Linguagem do tutor foi clara e compreensível", "counts": {"concordo_forte": 0, "concordo": 5, "indiferente": 1, "discordo": 0, "discordo_forte": 0}, "total": 6, "positive_pct": 83}, {"label": "Nível do Tutor foi adequado para a turma", "counts": {"concordo_forte": 0, "concordo": 5, "indiferente": 0, "discordo": 1, "discordo_forte": 0}, "total": 6, "positive_pct": 83}, {"label": "Facilidade para entrar/logar na plataforma", "counts": {"concordo_forte": 1, "concordo": 3, "indiferente": 0, "discordo": 0, "discordo_forte": 2}, "total": 6, "positive_pct": 67}, {"label": "Navegação entre aulas foi fácil e intuitiva", "counts": {"concordo_forte": 0, "concordo": 5, "indiferente": 1, "discordo": 0, "discordo_forte": 0}, "total": 6, "positive_pct": 83}, {"label": "Plataforma funcionou sem problemas técnicos", "counts": {"concordo_forte": 0, "concordo": 2, "indiferente": 1, "discordo": 1, "discordo_forte": 2}, "total": 6, "positive_pct": 33}], "Modo Aprender": [{"label": "Explicações foram claras", "counts": {"concordo_forte": 0, "concordo": 6, "indiferente": 0, "discordo": 0, "discordo_forte": 0}, "total": 6, "positive_pct": 100}, {"label": "Alunos se mantiveram engajados", "counts": {"concordo_forte": 1, "concordo": 4, "indiferente": 0, "discordo": 0, "discordo_forte": 1}, "total": 6, "positive_pct": 83}, {"label": "Modo ajudou a reforçar o conteúdo", "counts": {"concordo_forte": 0, "concordo": 5, "indiferente": 0, "discordo": 1, "discordo_forte": 0}, "total": 6, "positive_pct": 83}, {"label": "Didática foi adequada", "counts": {"concordo_forte": 0, "concordo": 4, "indiferente": 1, "discordo": 1, "discordo_forte": 0}, "total": 6, "positive_pct": 67}], "Modo Praticar": [{"label": "Nível de dificuldade foi adequado", "counts": {"concordo_forte": 0, "concordo": 6, "indiferente": 0, "discordo": 0, "discordo_forte": 0}, "total": 6, "positive_pct": 100}, {"label": "Questões foram relevantes para o conteúdo", "counts": {"concordo_forte": 0, "concordo": 5, "indiferente": 0, "discordo": 1, "discordo_forte": 0}, "total": 6, "positive_pct": 83}, {"label": "Alunos resolveram questões com autonomia", "counts": {"concordo_forte": 0, "concordo": 5, "indiferente": 1, "discordo": 0, "discordo_forte": 0}, "total": 6, "positive_pct": 83}, {"label": "Alunos se mantiveram engajados", "counts": {"concordo_forte": 0, "concordo": 4, "indiferente": 1, "discordo": 1, "discordo_forte": 0}, "total": 6, "positive_pct": 67}], "Satisfação Geral": [{"label": "Satisfação geral com o uso foi alta", "counts": {"concordo_forte": 1, "concordo": 3, "indiferente": 0, "discordo": 2, "discordo_forte": 0}, "total": 6, "positive_pct": 67}, {"label": "Gostaria de continuar utilizando após testes", "counts": {"concordo_forte": 1, "concordo": 4, "indiferente": 0, "discordo": 1, "discordo_forte": 0}, "total": 6, "positive_pct": 83}]}, "behaviors": {"items": [["Curiosidade", 5], ["Empolgação", 4], ["Colaboração", 4], ["Foco", 3], ["Autonomia", 2]], "total_teachers": 6, "no_negative_count": 4, "no_negative_pct": 67}, "quote": {"text": "A ferramenta foi de grande valia nas aulas de matemática das turmas dos oitavos anos pois conseguiu agregar conhecimentos aos discentes, mostrando interesse ainda mais pela aula.", "author": "Jucileide Cardoso de Oliveira", "role": "Professora de Matemática — 8º Ano, Demerval Lobão"}, "effectiveness": {"Fora do horário": {"Útil": 4, "Desnecessário": 1, "Muito útil": 1}, "Antes da explicação": {"Desnecessário": 1, "Útil": 4, "Essencial": 1}, "Junto com a explicação": {"Útil": 4, "Pouco útil": 1, "Essencial": 1}, "Após a explicação": {"Muito útil": 2, "Pouco útil": 1, "Útil": 3}}, "reach": {"municipios": 2, "professores": 6, "turmas": 7, "disciplinas": 3, "series": "3º ao 8º ano"}};
+
+    // ── Color palette ──
+    const COLORS = {
+        primary: '#6C3CE1',
+        primaryLight: '#8B5CF6',
+        accent: '#00D4AA',
+        accentDark: '#00B894',
+        warm: '#FF6B35',
+        gray: '#E5E7EB',
+        gradientPurple: ['#6C3CE1', '#8B5CF6', '#A78BFA', '#C4B5FD'],
+        gradientAccent: ['#059669', '#10B981', '#34D399', '#6EE7B7'],
+    };
+
+    Chart.defaults.font.family = "'Inter', sans-serif";
+    Chart.defaults.color = '#6B7280';
+
+    // ── Growth Chart ──
+    (function() {
+        const ctx = document.getElementById('growthChart').getContext('2d');
+        const gradient = ctx.createLinearGradient(0, 0, 0, 300);
+        gradient.addColorStop(0, 'rgba(108, 60, 225, 0.2)');
+        gradient.addColorStop(1, 'rgba(108, 60, 225, 0)');
+
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ["07/Nov", "10/Nov", "11/Nov", "18/Nov", "20/Nov", "24/Nov"],
+                datasets: [{
+                    label: 'Sess\u00f5es',
+                    data: [5, 6, 12, 25, 24, 39],
+                    borderColor: COLORS.primary,
+                    backgroundColor: gradient,
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 7,
+                    pointBackgroundColor: COLORS.primary,
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 3,
+                    pointHoverRadius: 10,
+                    borderWidth: 3
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: '#1A1A2E',
+                        titleFont: { weight: '600' },
+                        bodyFont: { size: 14 },
+                        padding: 12,
+                        cornerRadius: 8,
+                        callbacks: {
+                            label: function(ctx) { return ctx.parsed.y + ' sess\u00f5es'; }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: '#F3F4F6' },
+                        ticks: { font: { weight: '500' } }
+                    },
+                    x: {
+                        grid: { display: false },
+                        ticks: { font: { weight: '600' } }
+                    }
+                }
+            }
+        });
+    })();
+
+    // ── Engagement Chart (only 6+ message sessions) ──
+    (function() {
+        const ctx = document.getElementById('engagementChart').getContext('2d');
+        const allLabels = ["Explorat\u00f3rio (1-5)", "Inicial (6-20)", "Intermedi\u00e1rio (21-40)", "Avan\u00e7ado (41-60)", "Profundo (61+)"];
+        const allValues = [173, 43, 47, 52, 24];
+        // Skip the first bucket (exploratory 1-5)
+        const labels = allLabels.slice(1);
+        const values = allValues.slice(1);
+        const colors = ['#B794F6','#8B5CF6','#7C3AED','#5B21B6'];
+
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: values,
+                    backgroundColor: colors,
+                    borderRadius: 8,
+                    borderSkipped: false
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: '#1A1A2E',
+                        padding: 12,
+                        cornerRadius: 8,
+                        callbacks: {
+                            label: function(ctx) {
+                                const total = values.reduce((a,b) => a+b, 0);
+                                const pct = (ctx.parsed.x / total * 100).toFixed(1);
+                                return ctx.parsed.x + ' sess\u00f5es (' + pct + '%)';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        grid: { color: '#F3F4F6' },
+                        title: { display: true, text: 'N\u00famero de sess\u00f5es', font: { weight: '600' } }
+                    },
+                    y: {
+                        grid: { display: false },
+                        ticks: { font: { weight: '600', size: 12 } }
+                    }
+                }
+            }
+        });
+    })();
+
+    // ── Subject Doughnut ──
+    (function() {
+        const ctx = document.getElementById('subjectChart').getContext('2d');
+        const subjectData = DATA.by_subject;
+        const labels = Object.keys(subjectData);
+        const values = Object.values(subjectData);
+        const colors = [COLORS.primary, COLORS.accent, COLORS.warm, '#8B5CF6'];
+
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: values,
+                    backgroundColor: colors,
+                    borderWidth: 0,
+                    hoverOffset: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                cutout: '65%',
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: { padding: 16, usePointStyle: true, pointStyle: 'circle', font: { size: 13, weight: '500' } }
+                    },
+                    tooltip: {
+                        backgroundColor: '#1A1A2E',
+                        padding: 12,
+                        cornerRadius: 8,
+                        callbacks: {
+                            label: function(ctx) {
+                                const total = values.reduce((a,b) => a+b, 0);
+                                const pct = (ctx.parsed / total * 100).toFixed(1);
+                                return ctx.label + ': ' + ctx.parsed + ' (' + pct + '%)';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    })();
+
+    // ── Class Bar Chart ──
+    (function() {
+        const ctx = document.getElementById('classChart').getContext('2d');
+        const classData = DATA.by_class;
+        // Sort by value descending
+        const sorted = Object.entries(classData).sort((a,b) => b[1] - a[1]);
+        const labels = sorted.map(e => e[0]);
+        const values = sorted.map(e => e[1]);
+
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: values,
+                    backgroundColor: values.map((_, i) => {
+                        const palette = [COLORS.primary, '#7C3AED', '#8B5CF6', '#A78BFA', '#C4B5FD', '#DDD6FE', '#EDE9FE'];
+                        return palette[i % palette.length];
+                    }),
+                    borderRadius: 8,
+                    borderSkipped: false
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: '#1A1A2E',
+                        padding: 12,
+                        cornerRadius: 8,
+                        callbacks: {
+                            label: function(ctx) { return ctx.parsed.x + ' sess\u00f5es'; }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        grid: { color: '#F3F4F6' }
+                    },
+                    y: {
+                        grid: { display: false },
+                        ticks: { font: { weight: '600', size: 12 } }
+                    }
+                }
+            }
+        });
+    })();
+
+    </script>
+</body>
+</html>
